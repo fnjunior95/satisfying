@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
-const CreateAccount = ({ onCancel }) => {
+const CreateAccount = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
@@ -13,9 +13,8 @@ const CreateAccount = ({ onCancel }) => {
     setErrorMessage('O campo repetir senha difere da senha');
   };
 
-  const handleGoBack = () => {
-    // Chama a função fornecida pelo prop onCancel
-    onCancel();
+  const voltar = () => {
+    props.navigation.goBack()
   };
 
   return (
@@ -50,7 +49,7 @@ const CreateAccount = ({ onCancel }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={{ backgroundColor: 'red', width: '80%', height: 40, justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}
-        onPress={handleGoBack}
+        onPress={voltar}
       >
         <Text style={{ color: 'white' }}>Cancelar</Text>
       </TouchableOpacity>

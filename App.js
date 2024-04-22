@@ -1,27 +1,23 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import Login from './src/components/Login';
 import CreateAccount from './src/components/CreateAccount';
+import ForgotPassword from './src/components/ForgotPassword';
+import Home from './src/components/Home';
+
+const Stack = createStackNavigator();
 
 const App = () => {
-  const [creatingAccount, setCreatingAccount] = useState(false);
-
-  const handleCreateAccount = () => {
-    setCreatingAccount(true);
-  };
-
-  const handleCancelCreateAccount = () => {
-    setCreatingAccount(false);
-  };
-
+  
   return (
-    <View style={{ flex: 1 }}>
-      {creatingAccount ? (
-        <CreateAccount onCancel={handleCancelCreateAccount} />
-      ) : (
-        <Login onCreateAccount={handleCreateAccount} />
-      )}
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Login' component={Login}  />
+        <Stack.Screen name='CreateAccount' component={CreateAccount}  />
+        <Stack.Screen name='ForgotPassword' component={ForgotPassword}  />
+        <Stack.Screen name='Home' component={Home}  />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

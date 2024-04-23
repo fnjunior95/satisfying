@@ -1,9 +1,11 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Login from './src/components/Login';
-import CreateAccount from './src/components/CreateAccount';
-import ForgotPassword from './src/components/ForgotPassword';
-import Home from './src/components/Home';
+import Login from './src/screens/Login';
+import CreateAccount from './src/screens/CreateAccount';
+import ForgotPassword from './src/screens/ForgotPassword';
+import Home from './src/screens/Home';
+import Drawer from './src/screens/Drawer';
+import NovaPesquisa from './src/screens/NovaPesquisa';
 
 const Stack = createStackNavigator();
 
@@ -11,11 +13,13 @@ const App = () => {
   
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false, headerBackVisible: false }}>
         <Stack.Screen name='Login' component={Login}  />
         <Stack.Screen name='CreateAccount' component={CreateAccount}  />
         <Stack.Screen name='ForgotPassword' component={ForgotPassword}  />
+        <Stack.Screen name='Drawer' component={Drawer}  />
         <Stack.Screen name='Home' component={Home}  />
+        <Stack.Screen name='NovaPesquisa' component={NovaPesquisa}  />
       </Stack.Navigator>
     </NavigationContainer>
   );

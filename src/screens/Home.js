@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 
-const Home = () => {
+const Home = (props) => {
 
     // Simulação de dados de pesquisa
     const researchData = [
@@ -9,6 +9,10 @@ const Home = () => {
         { title: 'UBUNTU 2022', date: '05/06/2022' },
         { title: 'MENINAS CPU', date: '01/04/2022' }
     ];
+
+    const showNovaPesquisa = () => {
+        props.navigation.navigate('NovaPesquisa')
+    }
 
     return (
         
@@ -42,9 +46,8 @@ const Home = () => {
 
         
         <TouchableOpacity
-            style={{ backgroundColor: '#00FF7F', height: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}
-            //onPress={handleNewResearch} // Chama a função handleNewResearch ao pressionar o botão
-            >
+            style={{ backgroundColor: 'green', height: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}
+            onPress={showNovaPesquisa} >
             <Text style={{ fontSize: 18, color: 'white' }}>NOVA PESQUISA</Text>
         </TouchableOpacity>
         </View>

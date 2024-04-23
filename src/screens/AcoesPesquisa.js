@@ -2,15 +2,16 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const AcoesPesquisa = ( screen ) => {
+const AcoesPesquisa = (props) => {
+
   return (
     <View style={{ flex: 1, backgroundColor: '#6A5ACD' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 50, backgroundColor: 'darkslateblue', height: 80 }}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
-            <Icon name="arrow-back" size={30} color="lightblue" />
-          </TouchableOpacity>
-          <Text style={{ fontSize: 30, color: 'white', marginLeft: 10 }}>{screen}</Text>
-        </View>
+      <View style={styles.header}>
+          <TouchableOpacity onPress={() => props.navigation.navigate('Drawer')}>
+          <Icon name="arrow-back" size={30} color="lightblue" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Pesquisa selecionada</Text>
+      </View>
         
         <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.button}>
@@ -35,16 +36,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#6A5ACD',
-    padding: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+    backgroundColor: 'darkslateblue',
+    height: 70,
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 35,
     color: 'white',
-    marginBottom: 20,
+    marginLeft: 10,
   },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 50
   },
   button: {
     backgroundColor: 'darkslateblue',
@@ -52,12 +63,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     width: '30%',
+    height: '90%',
     padding: 10,
   },
   buttonText: {
     color: 'white',
     marginTop: 5,
-    fontSize: 16,
+    fontSize: 25,
     textAlign: 'center',
   },
 });

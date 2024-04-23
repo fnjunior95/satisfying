@@ -27,7 +27,7 @@ const Login = (props) => {
 
   const showHome = (email, password) => {
     if(validarEmail(email) && password != '') {
-      props.navigation.navigate('Drawer');
+      props.navigation.navigate('Drawer', {email: email});
     }
     else {
       handleError();

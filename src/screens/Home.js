@@ -14,8 +14,8 @@ const Home = (props) => {
         props.navigation.navigate('NovaPesquisa')
     }
 
-    const showAcoesPesquisa = (screen) => {
-        
+    const showAcoesPesquisa = (pesqisaSelecionada) => {
+        props.navigation.navigate('AcoesPesquisa', { screen: pesqisaSelecionada })
     }
 
     return (
@@ -40,11 +40,7 @@ const Home = (props) => {
                     <TouchableOpacity 
                         key={index}
                         style={styles.researchCard}
-                        onPress={() => {
-                            props.navigation.navigate('AcoesPesquisa', {
-                                params: { screen: research.title }
-                            })
-                        }} >
+                        onPress={() => {showAcoesPesquisa(research.title)}} >
                         <Text style={styles.title}>{research.title}</Text>
                         <Text style={styles.date}>{research.date}</Text>
                     </TouchableOpacity>

@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const DrawerNavigator = createDrawerNavigator();
 
-const Drawer = ({ route }) => {
+const Drawer = () => {
   return (
     <DrawerNavigator.Navigator
         screenOptions={{ drawerActiveTintColor: 'darkslateblue',

@@ -27,7 +27,7 @@ const Login = (props) => {
 
   const showHome = (email, password) => {
     if(validarEmail(email) && password != '') {
-      props.navigation.navigate('Drawer', { email });
+      props.navigation.navigate('Drawer');
     }
     else {
       handleError();
@@ -36,7 +36,7 @@ const Login = (props) => {
 
   return (
     <View style={styles.container}>
-        <View style={{flexDirection: 'row'}}><Text style={styles.logo}> Satisfying.you   </Text>
+        <View style={{flexDirection: 'row'}}><Text style={styles.logo}> Satisfying.you  </Text>
         <Icon name="mood"size={60} color='white' /></View>
         
         <Text style={styles.label}>E-mail</Text>

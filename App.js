@@ -6,6 +6,7 @@ import ForgotPassword from './src/screens/ForgotPassword';
 import Home from './src/screens/Home';
 import Drawer from './src/screens/Drawer';
 import NovaPesquisa from './src/screens/NovaPesquisa';
+import AcoesPesquisa from './src/screens/AcoesPesquisa';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ const App = () => {
         <Stack.Screen name='Drawer' component={Drawer}  />
         <Stack.Screen name='Home' component={Home}  />
         <Stack.Screen name='NovaPesquisa' component={NovaPesquisa}  />
+        <Stack.Screen name='AcoesPesquisa' component={AcoesPesquisa} />
       </Stack.Navigator>
     </NavigationContainer>
   );

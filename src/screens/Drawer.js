@@ -5,15 +5,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const DrawerNavigator = createDrawerNavigator();
 
-const Drawer = () => {
+const Drawer = ({ route }) => {
   return (
     <DrawerNavigator.Navigator
         screenOptions={{ drawerActiveTintColor: 'darkslateblue',
                          headerTitleStyle: { color: 'darkslateblue' },
-                         drawerLabelStyle: { fontSize: 20, color: 'white' },
+                         drawerLabelStyle: { fontSize: 25, color: 'white' },
                          drawerStyle: { backgroundColor: 'darkslateblue', width: '35%'}
                         }}
-        drawerContent={(props) => <DrawerNavScreen {...props} /> }
+                        drawerContent={(props) => <DrawerNavScreen {...props} />}
         >
       <DrawerNavigator.Screen name="Pesquisas" component={Home} 
       options={{

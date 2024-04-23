@@ -3,7 +3,7 @@ import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-const DrawerNavScreen = (props) => {
+const DrawerNavScreen = ({ props }) => {
   return (
     <DrawerContentScrollView {...props}>
       {/* Email do usuário */}
@@ -18,7 +18,7 @@ const DrawerNavScreen = (props) => {
           size={size}
           color={focused ? '#7cc' : '#ccc'}
         />
-      )} labelStyle={{color: 'white', fontSize: 20}} label="Sair" onPress={() => { props.navigation.popToTop() }} />
+      )} labelStyle={{color: 'white', fontSize: 25}} label="Sair" onPress={() => { props.navigation.popToTop() }} />
     </DrawerContentScrollView>
   );
 };

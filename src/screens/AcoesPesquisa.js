@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const AcoesPesquisa = (props) => {
 
   const titulo = props.route.params.screen;
-  const data = props.route.params.date;
 
   return (
     <View style={{ flex: 1, backgroundColor: '#6A5ACD' }}>
@@ -17,15 +16,15 @@ const AcoesPesquisa = (props) => {
       </View>
         
         <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('ModifySearch', { screen: titulo, date: data })}>
+            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('ModifySearch')}>
             <Icon name="edit-document" size={30} color="white" />
             <Text style={styles.buttonText}>Modificar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Coleta', { screen: titulo })}>
             <Icon name="library-add-check" size={30} color="white" />
             <Text style={styles.buttonText}>Coletar dados</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Relatorio')}>
             <Icon name="donut-large" size={30} color="white" />
             <Text style={styles.buttonText}>Relatório</Text>
             </TouchableOpacity>

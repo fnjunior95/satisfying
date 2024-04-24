@@ -18,16 +18,15 @@ const CreateAccount = (props) => {
   };
 
   const handleRegister = (email, senha, repeteSenha) => {
+    setErrorMessage('');
+    setSucessoMessage('');
     if(validarEmail(email)) {
       if(validarSenha(senha, repeteSenha)) {
         setSucessoMessage('Cadastro realizado com sucesso! (TESTE)')
-        setErrorMessage('');
       } else {
-        setSucessoMessage('');
         setErrorMessage('O campo repetir senha difere da senha');
       }
     } else {
-      setSucessoMessage('');
       setErrorMessage('E-mail e/ou senha inválidos');
     }
   };
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     backgroundColor: 'darkslateblue',
-    height: 65,
+    height: 60,
     paddingHorizontal: 20,
   },
   title: {
@@ -100,7 +99,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
-    fontSize: 20,
+    fontSize: 18,
     color: 'white',
     alignSelf: 'flex-start',
     marginHorizontal: 160,

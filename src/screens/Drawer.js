@@ -14,8 +14,8 @@ const Drawer = (props) => {
       screenOptions={{ 
         drawerActiveTintColor: 'darkslateblue',
         headerTitleStyle: { color: 'darkslateblue' },
-        drawerLabelStyle: { fontSize: 25, color: 'white' },
-        drawerStyle: { backgroundColor: 'darkslateblue', width: '35%'}
+        drawerLabelStyle: { fontSize: 50, color: 'white' },
+        drawerStyle: { backgroundColor: 'darkslateblue', width: '40%'}
       }}
 
       drawerContent={ (props) => 
@@ -32,7 +32,7 @@ const Drawer = (props) => {
             size={size}
             color={focused ? '#7cc' : '#ccc'}
           />
-        )} labelStyle={{color: 'white', fontSize: 25}} label="Pesquisa" onPress={() => { props.navigation.navigate('Home') }} />
+        )} labelStyle={{color: 'white', fontSize: 25}} label="Pesquisa" onPress={() => { props.navigation.goBack() }} />
 
         <DrawerItem icon={({ focused, color, size }) => (
           <Icon

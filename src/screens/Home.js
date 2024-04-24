@@ -96,13 +96,13 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: 'green',
-        height: 50,
+        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
     },
     buttonText: {
-        fontSize: 25,
+        fontSize: 20,
         color: 'white',
     },
 });

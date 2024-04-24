@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     label: {
-      fontSize: 20,
+      fontSize: 18,
       color: 'white',
       alignSelf: 'flex-start',
       marginHorizontal: 160,

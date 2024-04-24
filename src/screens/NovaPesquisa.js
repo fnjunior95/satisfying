@@ -16,20 +16,18 @@ const NovaPesquisa = ({ navigation }) => {
   const [sucessoMessage, setSucessoMessage] = useState('');
 
   const handleCadastroPesquisa = (nome, data) => {
+    setErrorNome(''); setErrorData('');setSucessoMessage('');
     if(nome != '' && data != '') {
-      setSucessoMessage('Nova pesquisa registrada!')
-      setErrorNome(''); setErrorData('');
+        setSucessoMessage('Nova pesquisa registrada!')
     } else {
-      if(nome == '') {
-        setSucessoMessage('');
+    if(nome == '') {
         setErrorNome('Preencha o nome da pesquisa');
-      }
-      if(data == '') {
-        setSucessoMessage('');
-        setErrorData('Preencha a data');
-      }
     }
-  };
+    if(data == '') {
+        setErrorData('Preencha a data');
+    }
+    }
+};
 
   const handleImagePicker = () => {
     Alert.alert(
@@ -136,7 +134,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 5,
     backgroundColor: 'darkslateblue',
-    height: 65,
+    height: 60,
     paddingHorizontal: 20,
   },
   title: {
@@ -149,7 +147,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
-    fontSize: 20,
+    fontSize: 18,
     color: 'white',
     alignSelf: 'flex-start',
     marginHorizontal: 160,

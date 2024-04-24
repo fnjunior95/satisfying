@@ -13,11 +13,10 @@ const ForgotPassword = (props) => {
   };
 
   const handleRecoverPassword = (text) => {
+    setSucessoMessage('');setErrorMessage('');
     if(validarEmail(text)) {
       setSucessoMessage('Email enviado com sucesso!')
-      setErrorMessage('');
     } else {
-      setSucessoMessage('');
       setErrorMessage('E-mail parece ser inválido');
     }
   };
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 60,
     backgroundColor: 'darkslateblue',
-    height: 65,
+    height: 60,
     paddingHorizontal: 20,
   },
   title: {
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
-    fontSize: 20,
+    fontSize: 18,
     color: 'white',
     alignSelf: 'flex-start',
     marginHorizontal: 160,

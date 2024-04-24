@@ -8,6 +8,9 @@ import Drawer from './src/screens/Drawer';
 import NovaPesquisa from './src/screens/NovaPesquisa';
 import AcoesPesquisa from './src/screens/AcoesPesquisa';
 import ModifySearch from './src/screens/ModifySearch';
+import Coleta from './src/screens/Coleta';
+import Agradecimento from './src/screens/Agradecimento';
+import Relatorio from './src/screens/Relatorio';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +27,9 @@ const App = () => {
         <Stack.Screen name='NovaPesquisa' component={NovaPesquisa}  />
         <Stack.Screen name='AcoesPesquisa' component={AcoesPesquisa} />
         <Stack.Screen name='ModifySearch' component={ModifySearch} />
+        <Stack.Screen name='Coleta' component={Coleta} />
+        <Stack.Screen name='Agradecimento' component={Agradecimento} />
+        <Stack.Screen name='Relatorio' component={Relatorio} />
       </Stack.Navigator>
     </NavigationContainer>
   );

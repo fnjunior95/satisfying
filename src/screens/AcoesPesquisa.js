@@ -4,26 +4,29 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const AcoesPesquisa = (props) => {
 
+  const titulo = props.route.params.screen;
+  const data = props.route.params.date;
+
   return (
     <View style={{ flex: 1, backgroundColor: '#6A5ACD' }}>
       <View style={styles.header}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('Drawer')}>
+          <TouchableOpacity onPress={() => props.navigation.pop()}>
           <Icon name="arrow-back" size={30} color="lightblue" />
         </TouchableOpacity>
-        <Text style={styles.title}>Pesquisa selecionada</Text>
+        <Text style={styles.title}>{titulo}</Text>
       </View>
         
         <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={styles.button}>
-            <Icon name="edit" size={30} color="white" />
+            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('ModifySearch', { screen: titulo, date: data })}>
+            <Icon name="edit-document" size={30} color="white" />
             <Text style={styles.buttonText}>Modificar</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
-            <Icon name="check" size={30} color="white" />
+            <Icon name="library-add-check" size={30} color="white" />
             <Text style={styles.buttonText}>Coletar dados</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
-            <Icon name="assessment" size={30} color="white" />
+            <Icon name="donut-large" size={30} color="white" />
             <Text style={styles.buttonText}>Relatório</Text>
             </TouchableOpacity>
         </View>
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 5,
     backgroundColor: 'darkslateblue',
-    height: 70,
+    height: 65,
     paddingHorizontal: 20,
   },
   title: {

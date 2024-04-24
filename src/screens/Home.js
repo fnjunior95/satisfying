@@ -14,8 +14,8 @@ const Home = (props) => {
         props.navigation.navigate('NovaPesquisa')
     }
 
-    const showAcoesPesquisa = (pesqisaSelecionada) => {
-        props.navigation.navigate('AcoesPesquisa', { screen: pesqisaSelecionada })
+    const showAcoesPesquisa = (titulo, data) => {
+        props.navigation.navigate('AcoesPesquisa', { screen: titulo, date: data })
     }
 
     return (

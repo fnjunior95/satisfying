@@ -85,9 +85,9 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 10,
     backgroundColor: 'darkslateblue',
-    height: 70,
+    height: 65,
     paddingHorizontal: 20,
   },
   title: {
@@ -115,11 +115,11 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     color: 'tomato',
-    fontSize: 30
+    fontSize: 15
   },
   sucessoMessage: {
     color: 'limegreen',
-    fontSize: 30
+    fontSize: 15
   },
   button: {
     backgroundColor: 'green',
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    marginTop: 5
+    marginTop: 10
   },
   buttonText: {
     fontSize: 20,

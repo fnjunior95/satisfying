@@ -110,8 +110,7 @@ const styles = StyleSheet.create({
     },
     errorMessage: {
       color: 'tomato',
-      marginBottom: 10,
-      fontSize: 30
+      fontSize: 15
     },
     button: {
         backgroundColor: 'green',

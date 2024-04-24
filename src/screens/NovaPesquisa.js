@@ -1,19 +1,71 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { format } from 'date-fns';
+import {launchCamera, launchImageLibrary, ImageLibraryOptions} from 'react-native-image-picker';
+import DatePicker from 'react-native-date-picker';
 
 const NovaPesquisa = ({ navigation }) => {
 
   const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false)
   const [nomePesquisa, setNomePesquisa] = useState('');
+  const [errorNome, setErrorNome] = useState('');
+  const [errorData, setErrorData] = useState('');
+  const [sucessoMessage, setSucessoMessage] = useState('');
+
+  const handleCadastroPesquisa = (nome, data) => {
+    if(nome != '' && data != '') {
+      setSucessoMessage('Nova pesquisa registrada!')
+      setErrorNome(''); setErrorData('');
+    } else {
+      if(nome == '') {
+        setSucessoMessage('');
+        setErrorNome('Preencha o nome da pesquisa');
+      }
+      if(data == '') {
+        setSucessoMessage('');
+        setErrorData('Preencha a data');
+      }
+    }
+  };
+
+  const handleImagePicker = () => {
+    Alert.alert(
+      "Selecione",
+      "Informe de onde voce quer pegar a foto",
+      [
+        {
+          text: "Galeria",
+          onPress: () => pickImageFromGalery(),
+          style: "default"
+        },
+        {
+          text: "Camera",
+          onPress: () => pickImageFromCamera(),
+          style: "default"
+        }
+      ],
+      {
+        cancelable: true
+      }
+    )
+  }
+
+  const pickImageFromGalery = async () => {
+    const result = await launchImageLibrary(options={mediaType: 'photo'});
+  }
+
+  const pickImageFromCamera = async () => {
+    const result = await launchCamera(options={mediaType: 'photo'});
+  }
 
   return (
     <View style={styles.container}>
 
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Drawer')}>
+        <TouchableOpacity onPress={() => navigation.pop()}>
           <Icon name="arrow-back" size={30} color="lightblue" />
         </TouchableOpacity>
         <Text style={styles.title}>Nova pesquisa</Text>
@@ -28,23 +80,44 @@ const NovaPesquisa = ({ navigation }) => {
           value={nomePesquisa}
           onChangeText={setNomePesquisa}
         />
+        {errorNome ? <Text style={styles.errorMessage}>{errorNome}</Text> : null}
 
         <Text style={styles.label}>Data</Text>
         <TextInput
           style={styles.input}
           value={format(date, 'dd/MM/yyyy')}
-          right={<TextInput.Icon icon="calendar" size={35}/>}
-          onChangeText={setDate}
+          right={<TextInput.Icon icon="calendar-month" size={35} style={{paddingTop: 10}} onPress={() => setOpen(true)}/>}
+          editable={false}
         />
+        <DatePicker
+        title={'Selecione a data'}
+        modal
+        locale='pt'
+        mode='date'
+        open={open}
+        date={date}
+        onConfirm={(date) => {
+          setOpen(false)
+          setDate(date)
+        }}
+        onCancel={() => {
+          setOpen(false)
+        }}
+        />
+        
+        {errorData ? <Text style={styles.errorMessage}>{errorData}</Text> : null}
 
         <Text style={styles.label}>Imagem</Text>
-        <TouchableOpacity style={styles.imageButton}>
+        <TouchableOpacity style={styles.imageButton} onPress={handleImagePicker}>
           <Text style={{ color: 'black' }}>Câmera/Galeria de imagens</Text>
         </TouchableOpacity>
         
+        
+        {sucessoMessage ? <Text style={styles.sucessoMessage}>{sucessoMessage}</Text> : null}
+
         <TouchableOpacity
           style={styles.button}
-          onPress={() => console.log('Cadastrar')}
+          onPress={() => handleCadastroPesquisa(nomePesquisa, format(date, 'dd/MM/yyyy'))}
         >
           <Text style={styles.buttonText}>CADASTRAR</Text>
         </TouchableOpacity>
@@ -63,7 +136,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 5,
     backgroundColor: 'darkslateblue',
-    height: 70,
+    height: 65,
     paddingHorizontal: 20,
   },
   title: {
@@ -81,17 +154,26 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginHorizontal: 160,
   },
+  errorMessage: {
+    color: 'tomato',
+    fontSize: 15
+  },
+  sucessoMessage: {
+    color: 'limegreen',
+    marginBottom: 1,
+    fontSize: 15
+  },
   input: {
     width: '60%',
     marginBottom: 2,
     backgroundColor: 'white',
-    height: 35,
+    height: 30,
     paddingHorizontal: 15,
     paddingVertical: 5
   },
   imageButton: {
     backgroundColor: 'white',
-    height: 60,
+    height: 55,
     width: '30%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -103,7 +185,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: 'green',
     width: '60%',
-    height: 40,
+    height: 35,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,

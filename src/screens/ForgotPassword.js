@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 50,
+    marginBottom: 60,
     backgroundColor: 'darkslateblue',
-    height: 70,
+    height: 65,
     paddingHorizontal: 20,
   },
   title: {
@@ -92,13 +92,11 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     color: 'tomato',
-    marginBottom: 10,
-    fontSize: 30
+    fontSize: 15
   },
   sucessoMessage: {
     color: 'limegreen',
-    marginBottom: 10,
-    fontSize: 30
+    fontSize: 15
   },
   button: {
     backgroundColor: 'green',

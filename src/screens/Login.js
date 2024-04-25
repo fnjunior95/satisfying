@@ -65,19 +65,21 @@ const Login = (props) => {
         <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-        style={styles.linkButton1}
-        onPress={showCreateAccount} 
-        >
-        <Text style={styles.linkText}>Criar nova conta</Text>
-        </TouchableOpacity>
+        <View style={{flexDirection:"row", justifyContent:"space-between", paddingHorizontal: 150}}>
+          <TouchableOpacity
+          style={styles.linkButton1}
+          onPress={showCreateAccount} 
+          >
+          <Text style={styles.linkText}>Criar nova conta</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-        style={styles.linkButton2}
-        onPress={showForgotPassword}
-        >
-        <Text style={styles.linkText}>Esqueci minha senha</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+          style={styles.linkButton2}
+          onPress={showForgotPassword}
+          >
+          <Text style={styles.linkText}>Esqueci minha senha</Text>
+          </TouchableOpacity>
+        </View>
          
     </View>
   );
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 15,
+        marginBottom: 25,
         marginTop: 5
     },
     buttonText: {
@@ -137,14 +139,18 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 10,
-      backgroundColor: '#4dc6e8'
+      backgroundColor: '#4dc6e8',
+      flex: 5,
+      marginHorizontal: 10
     },
     linkButton2: {
       width: '60%',
       height: 30,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#d1d1d1'
+      backgroundColor: '#d1d1d1',
+      flex: 5,
+      marginHorizontal: 10
   },
     linkText: {
         color: 'white',

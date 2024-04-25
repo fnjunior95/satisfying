@@ -38,6 +38,7 @@ const Relatorio = (props) => {
                 backgroundColor="transparent"
                 paddingLeft="15"
                 absolute
+                fontFamily='AveriaLibre-Regular'
             />
         </View>
     </View>
@@ -61,10 +62,11 @@ const styles = StyleSheet.create({
         fontSize: 35,
         color: 'white',
         marginLeft: 10,
+        fontFamily: 'AveriaLibre-Regular'
     },
     content: {
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
 });
 

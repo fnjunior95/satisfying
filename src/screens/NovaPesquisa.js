@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: 'white',
     marginLeft: 10,
+    fontFamily: 'AveriaLibre-Regular'
   },
   content: {
     justifyContent: 'center',
@@ -151,15 +152,18 @@ const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'flex-start',
     marginHorizontal: 160,
+    fontFamily: 'AveriaLibre-Regular'
   },
   errorMessage: {
     color: 'tomato',
-    fontSize: 15
+    fontSize: 15,
+    fontFamily: 'AveriaLibre-Regular'
   },
   sucessoMessage: {
     color: 'limegreen',
     marginBottom: 1,
-    fontSize: 15
+    fontSize: 15,
+    fontFamily: 'AveriaLibre-Regular'
   },
   input: {
     width: '60%',
@@ -167,7 +171,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: 30,
     paddingHorizontal: 15,
-    paddingVertical: 5
+    paddingVertical: 5,
+    fontFamily: 'AveriaLibre-Regular'
   },
   imageButton: {
     backgroundColor: 'white',
@@ -191,6 +196,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: 'white',
+    fontFamily: 'AveriaLibre-Regular'
   },
 });
 

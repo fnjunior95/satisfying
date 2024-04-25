@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: 'white',
         paddingHorizontal: 10,
+        fontFamily: 'AveriaLibre-Regular',
     },
     searchButton: {
         marginLeft: 10,
@@ -89,10 +90,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
+        fontFamily: 'AveriaLibre-Regular',
     },
     date: {
         fontSize: 16,
         color: 'gray',
+        fontFamily: 'AveriaLibre-Regular',
     },
     button: {
         backgroundColor: 'green',
@@ -104,6 +107,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 20,
         color: 'white',
+        fontFamily: 'AveriaLibre-Regular',
     },
 });
 

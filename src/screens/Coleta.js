@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     color: 'white',
     marginBottom: 20,
     textAlign: 'center',
+    fontFamily: 'AveriaLibre-Regular'
   },
   optionsContainer: {
     flexDirection: 'row',
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
     marginTop: 10,
+    fontFamily: 'AveriaLibre-Regular'
   },
   selectedOption: {
     borderColor: 'white',

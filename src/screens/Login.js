@@ -94,11 +94,11 @@ const styles = StyleSheet.create({
     logo: {
         fontSize: 35,
         fontFamily: 'AveriaLibre-Regular',
-        marginBottom: 50,
+        marginHorizontal: 10,
         color: 'white'
     },
     label: {
-      marginRight:180,
+      marginRight:430,
       fontSize: 18,
       color: 'white',
       fontFamily: 'AveriaLibre-Regular'
@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 30,
-        marginTop: 10
+        marginBottom: 15,
+        marginTop: 5
     },
     buttonText: {
         color: 'white',
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
       height: 30,
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: 13,
+      marginBottom: 10,
       backgroundColor: '#4dc6e8'
     },
     linkButton2: {

@@ -129,7 +129,7 @@ const ModifySearch = (props) => {
                         onPress={() => setModalVisible(true)}
                         >
                             <Icon name="delete" size={30} color="white" />
-                            <Text style={{ color: 'white' }}>Apagar</Text>
+                            <Text style={{ color: 'white', fontFamily: 'AveriaLibre-Regular' }}>Apagar</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -174,6 +174,7 @@ const styles = StyleSheet.create({
         fontSize: 35,
         color: 'white',
         marginLeft: 10,
+        fontFamily: 'AveriaLibre-Regular'
     },
     content: {
         justifyContent: 'center',
@@ -184,13 +185,15 @@ const styles = StyleSheet.create({
         color: 'white',
         alignSelf: 'flex-start',
         marginHorizontal: 160,
+        fontFamily: 'AveriaLibre-Regular'
     },
     input: {
         width: '60%',
         backgroundColor: 'white',
         height: 30,
         paddingHorizontal: 15,
-        paddingVertical: 5
+        paddingVertical: 5,
+        fontFamily: 'AveriaLibre-Regular'
     },
     imageButton: {
         backgroundColor: 'white',
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         borderRadius: 5,
         marginBottom: 10,
-        marginHorizontal: 160,
+        marginHorizontal: 160
     },
     button: {
         backgroundColor: 'green',
@@ -211,6 +214,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: 157,
         borderRadius: 10,
+        fontFamily: 'AveriaLibre-Regular'
     },
     btnDelete: {
         flexDirection: 'column',
@@ -222,16 +226,19 @@ const styles = StyleSheet.create({
     },
     errorMessage: {
         color: 'tomato',
-        fontSize: 15
+        fontSize: 15,
+        fontFamily: 'AveriaLibre-Regular'
     },
     sucessoMessage: {
-            color: 'limegreen',
-            marginBottom: 1,
-            fontSize: 15
+        color: 'limegreen',
+        marginBottom: 1,
+        fontSize: 15,
+        fontFamily: 'AveriaLibre-Regular'
     },
     buttonText: {
         fontSize: 20,
         color: 'white',
+        fontFamily: 'AveriaLibre-Regular'
     },
     modal: {
         marginHorizontal: 150,
@@ -247,7 +254,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 20,
         color: 'white',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        fontFamily: 'AveriaLibre-Regular'
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -262,6 +270,7 @@ const styles = StyleSheet.create({
     modalButtonText: {
         fontSize: 16,
         color: 'white',
+        fontFamily: 'AveriaLibre-Regular'
     },
 });
 

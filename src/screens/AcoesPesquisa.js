@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: 'white',
     marginLeft: 10,
+    fontFamily: 'AveriaLibre-Regular'
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -73,6 +74,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 25,
     textAlign: 'center',
+    fontFamily: 'AveriaLibre-Regular'
   },
 });
 

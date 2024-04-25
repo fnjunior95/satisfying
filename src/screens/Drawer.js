@@ -13,9 +13,9 @@ const Drawer = (props) => {
     <DrawerNavigator.Navigator
       screenOptions={{ 
         drawerActiveTintColor: 'darkslateblue',
-        headerTitleStyle: { color: 'darkslateblue' },
-        drawerLabelStyle: { fontSize: 50, color: 'white' },
-        drawerStyle: { backgroundColor: 'darkslateblue', width: '40%'}
+        headerTitleStyle: { color: 'darkslateblue', fontFamily: 'AveriaLibre-Regular' },
+        drawerLabelStyle: { fontSize: 50, color: 'white', fontFamily: 'AveriaLibre-Regular' },
+        drawerStyle: { backgroundColor: 'darkslateblue', width: '40%', fontFamily: 'AveriaLibre-Regular'}
       }}
 
       drawerContent={ (props) => 
@@ -32,7 +32,7 @@ const Drawer = (props) => {
             size={size}
             color={focused ? '#7cc' : '#ccc'}
           />
-        )} labelStyle={{color: 'white', fontSize: 25}} label="Pesquisa" onPress={() => { props.navigation.goBack() }} />
+        )} labelStyle={{color: 'white', fontSize: 25, fontFamily: 'AveriaLibre-Regular'}} label="Pesquisa" onPress={() => { props.navigation.goBack() }} />
 
         <DrawerItem icon={({ focused, color, size }) => (
           <Icon
@@ -40,7 +40,7 @@ const Drawer = (props) => {
             size={size}
             color={focused ? '#7cc' : '#ccc'}
           />
-        )} labelStyle={{color: 'white', fontSize: 25}} label="Sair" onPress={() => { props.navigation.popToTop() }} />
+        )} labelStyle={{color: 'white', fontSize: 25, fontFamily: 'AveriaLibre-Regular'}} label="Sair" onPress={() => { props.navigation.popToTop() }} />
       </DrawerContentScrollView>
 
       }> 
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'center',
     marginBottom: 5,
+    fontFamily: 'AveriaLibre-Regular',
   },
   separator: {
     borderBottomColor: 'white',

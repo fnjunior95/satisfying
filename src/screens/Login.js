@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
+
 const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,7 +38,7 @@ const Login = (props) => {
   return (
     <View style={styles.container}>
         <View style={{flexDirection: 'row'}}><Text style={styles.logo}> Satisfying.you  </Text>
-        <Icon name="mood"size={60} color='white' /></View>
+        <Icon name="mood"size={50} color='white' /></View>
         
         <Text style={styles.label}>E-mail</Text>
         <TextInput
@@ -87,63 +88,68 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'darkslateblue',
+         backgroundColor: 'darkslateblue'
+        
     },
     logo: {
-        fontSize: 40,
-        marginBottom: 10,
-        color: 'white',
+        fontSize: 35,
+        fontFamily: 'AveriaLibre-Regular',
+        marginBottom: 50,
+        color: 'white'
     },
     label: {
+      marginRight:180,
       fontSize: 18,
       color: 'white',
-      alignSelf: 'flex-start',
-      marginHorizontal: 160,
+      fontFamily: 'AveriaLibre-Regular'
     },
     input: {
       width: '60%',
       marginBottom: 2,
       backgroundColor: 'white',
+      fontFamily: 'AveriaLibre-Regular',
       height: 40,
       paddingHorizontal: 15,
       paddingVertical: 5
     },
     errorMessage: {
       color: 'tomato',
+      fontFamily: 'AveriaLibre-Regular',
       fontSize: 15
     },
     button: {
-        backgroundColor: 'green',
+      backgroundColor: '#5cdb95',
         width: '60%',
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 15,
+        marginBottom: 30,
         marginTop: 10
     },
     buttonText: {
         color: 'white',
-        fontSize: 25,
+        fontFamily: 'AveriaLibre-Regular',
+        fontSize: 25
     },
     linkButton1: {
       width: '60%',
       height: 30,
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: 5,
-      backgroundColor: 'royalblue',
+      marginBottom: 13,
+      backgroundColor: '#4dc6e8'
     },
     linkButton2: {
       width: '60%',
       height: 30,
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: 5,
-      backgroundColor: 'gray',
+      backgroundColor: '#d1d1d1'
   },
     linkText: {
         color: 'white',
-        fontSize: 20,
+        fontFamily: 'AveriaLibre-Regular',
+        fontSize: 20
     },
 });
 

@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: 'tomato',
     fontSize: 15,
-    fontFamily: 'AveriaLibre-Regular'
+    fontFamily: 'AveriaLibre-Regular',
+    textAlign:'left'
   },
   sucessoMessage: {
     color: 'limegreen',
@@ -103,13 +104,12 @@ const styles = StyleSheet.create({
     fontFamily: 'AveriaLibre-Regular'
   },
   button: {
-    backgroundColor: 'green',
+    backgroundColor: '#37BD6D',
     width: '60%',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
-    marginTop: 10
+    marginTop: 55
   },
   buttonText: {
     fontSize: 20,

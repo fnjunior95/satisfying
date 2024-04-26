@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
 
 const Home = (props) => {
 
     // Simulação de dados de pesquisa
     const researchData = [
-        { title: 'SECOMP 2023', date: '10/10/2023' },
-        { title: 'UBUNTU 2022', date: '05/06/2022' },
-        { title: 'MENINAS CPU', date: '01/04/2022' }
+        { title: 'SECOMP 2023', date: '10/10/2023', image: require('../../assets/images/secomp-icon.png') },
+        { title: 'UBUNTU 2022', date: '05/06/2022', image: require('../../assets/images/ubuntu-icon.png') },
+        { title: 'MENINAS CPU', date: '01/04/2022', image: require('../../assets/images/meninas-icon.png') }
     ];
 
     const showNovaPesquisa = () => {
@@ -23,10 +23,13 @@ const Home = (props) => {
         <View style={styles.container}>
         
             <View style={styles.searchContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Insira o termo de busca..."
-                />
+                <View style={styles.inputContainer}>
+                    <Image source={require('../../assets/icons/search-icon.png')} style={styles.searchIcon} />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Insira o termo de busca..."
+                    />
+                </View>
                 <TouchableOpacity style={styles.searchButton}>
                 </TouchableOpacity>
             </View>
@@ -41,7 +44,8 @@ const Home = (props) => {
                         key={index}
                         style={styles.researchCard}
                         onPress={() => {showAcoesPesquisa(research.title)}} >
-                        <Text style={styles.title}>{research.title}</Text>
+                        <Image source={research.image} style={styles.cardImage} resizeMode="contain" />
+                        <Text style={[styles.title, { color: '#3F92C5' }]}>{research.title}</Text>
                         <Text style={styles.date}>{research.date}</Text>
                     </TouchableOpacity>
                 ))}
@@ -67,10 +71,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 20,
     },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+        backgroundColor: 'white',
+        borderRadius: 10,
+    },
     input: {
         flex: 1,
         height: 40,
-        backgroundColor: 'white',
         paddingHorizontal: 10,
         fontFamily: 'AveriaLibre-Regular',
     },
@@ -85,6 +95,15 @@ const styles = StyleSheet.create({
         marginRight: 10,
         padding: 15,
         borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    cardImage: {
+        width: 50,
+        height: 50,
+        maxWidth: 50, // Defina um tamanho máximo
+        maxHeight: 50, // Defina um tamanho máximo
+        marginBottom: 10,
     },
     title: {
         fontSize: 18,
@@ -98,7 +117,7 @@ const styles = StyleSheet.create({
         fontFamily: 'AveriaLibre-Regular',
     },
     button: {
-        backgroundColor: 'green',
+        backgroundColor: '#37BD6D',
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',
@@ -108,6 +127,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'white',
         fontFamily: 'AveriaLibre-Regular',
+    },
+    searchIcon: {
+        width: 20,
+        height: 20,
+        marginRight: 0,
+        marginLeft: 10
     },
 });
 

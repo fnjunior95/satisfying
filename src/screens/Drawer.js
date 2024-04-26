@@ -32,7 +32,7 @@ const Drawer = (props) => {
             size={size}
             color={focused ? '#7cc' : '#ccc'}
           />
-        )} labelStyle={{color: 'white', fontSize: 25, fontFamily: 'AveriaLibre-Regular'}} label="Pesquisa" onPress={() => { props.navigation.goBack() }} />
+        )} labelStyle={{color: 'white', fontSize: 25, fontFamily: 'AveriaLibre-Regular'}} label="Pesquisas" onPress={() => { props.navigation.goBack() }} />
 
         <DrawerItem icon={({ focused, color, size }) => (
           <Icon
@@ -45,7 +45,7 @@ const Drawer = (props) => {
 
       }> 
 
-      {/* COMPONENTE INUTIL QUE TA INVISUVEL NESSA PORRA */}
+      {/* COMPONENTE INUTIL QUE TA INVISIVEL */}
       <DrawerNavigator.Screen name="Pesquisas" component={Home}/>
 
     </DrawerNavigator.Navigator>

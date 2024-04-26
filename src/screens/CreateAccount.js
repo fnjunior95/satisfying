@@ -126,13 +126,14 @@ const styles = StyleSheet.create({
     fontFamily: 'AveriaLibre-Regular'
   },
   button: {
-    backgroundColor: 'green',
+    backgroundColor: '#37BD6D',
     width: '60%',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
-    marginTop: 10
+    marginTop: 35
+    
+
   },
   buttonText: {
     fontSize: 20,

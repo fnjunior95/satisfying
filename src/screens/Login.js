@@ -1,162 +1,164 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  
-  //valida email
+
   const validarEmail = (email) => {
-    return /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/.test(email)
+    return /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/.test(email);
   };
 
-  //TODO: mensagem de erro do login
   const handleError = () => {
     setErrorMessage('E-mail e/ou senha inválidos.');
   };
 
   const showCreateAccount = () => {
-    props.navigation.navigate('CreateAccount')
-  }
+    props.navigation.navigate('CreateAccount');
+  };
 
   const showForgotPassword = () => {
-    props.navigation.navigate('ForgotPassword')
-  }
+    props.navigation.navigate('ForgotPassword');
+  };
 
   const showHome = (email, password) => {
-    if(validarEmail(email) && password != '') {
-      props.navigation.navigate('Drawer', {email: email});
-    }
-    else {
+    if (validarEmail(email) && password !== '') {
+      props.navigation.navigate('Drawer', { email: email });
+    } else {
       handleError();
     }
-  }
+  };
 
   return (
-    <View style={styles.container}>
-        <View style={{flexDirection: 'row'}}><Text style={styles.logo}> Satisfying.you  </Text>
-        <Icon name="mood"size={50} color='white' /></View>
-        
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.logoContainer}>
+        <Text style={styles.logo}> Satisfying.you </Text>
+        <Icon name="mood" size={windowWidth > 600 ? 50 : 40} color="white" />
+      </View>
+
+      <View style={styles.inputContainer}>
         <Text style={styles.label}>E-mail</Text>
         <TextInput
-        style={styles.input}
-        placeholder="usuario@dominio.com"
-        value={email}
-        onChangeText={text => setEmail(text)}
+          style={styles.input}
+          placeholder="usuario@dominio.com"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+         
+          
         />
+      </View>
 
+      <View style={styles.inputContainer}>
         <Text style={styles.label}>Senha</Text>
         <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        secureTextEntry
-        value={password}
-        onChangeText={text => setPassword(text)}
+          style={styles.input}
+          placeholder="Senha"
+          secureTextEntry
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          
         />
-        {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
+      </View>
 
-        <TouchableOpacity
-        style={styles.button}
-        onPress={() => {showHome(email, password)}}
-        >
+      {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
+
+      <TouchableOpacity style={styles.button} onPress={() => showHome(email, password)}>
         <Text style={styles.buttonText}>Entrar</Text>
+      </TouchableOpacity>
+
+      <View style={styles.linksContainer}>
+        <TouchableOpacity style={styles.linkButton} onPress={showCreateAccount}>
+          <Text style={styles.linkText}>Criar nova conta</Text>
         </TouchableOpacity>
 
-        <View style={{flexDirection:"row", justifyContent:"space-between", paddingHorizontal: 150}}>
-          <TouchableOpacity
-          style={styles.linkButton1}
-          onPress={showCreateAccount} 
-          >
-          <Text style={styles.linkText}>Criar nova conta</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-          style={styles.linkButton2}
-          onPress={showForgotPassword}
-          >
-          <Text style={styles.linkText}>Esqueci minha senha</Text>
-          </TouchableOpacity>
-        </View>
-         
-    </View>
+        <TouchableOpacity style={[styles.linkButton, { backgroundColor: '#d1d1d1' }]} onPress={showForgotPassword}>
+          <Text style={styles.linkText}>Esqueci a senha</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-         backgroundColor: 'darkslateblue'
-        
-    },
-    logo: {
-        fontSize: 35,
-        fontFamily: 'AveriaLibre-Regular',
-        marginHorizontal: 10,
-        color: 'white'
-    },
-    label: {
-      marginRight:430,
-      fontSize: 18,
-      color: 'white',
-      fontFamily: 'AveriaLibre-Regular'
-    },
-    input: {
-      width: '60%',
-      marginBottom: 2,
-      backgroundColor: 'white',
-      fontFamily: 'AveriaLibre-Regular',
-      height: 40,
-      paddingHorizontal: 15,
-      paddingVertical: 5
-    },
-    errorMessage: {
-      color: 'tomato',
-      fontFamily: 'AveriaLibre-Regular',
-      fontSize: 15
-    },
-    button: {
-      backgroundColor: '#5cdb95',
-        width: '60%',
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 25,
-        marginTop: 5
-    },
-    buttonText: {
-        color: 'white',
-        fontFamily: 'AveriaLibre-Regular',
-        fontSize: 25
-    },
-    linkButton1: {
-      width: '60%',
-      height: 30,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 10,
-      backgroundColor: '#4dc6e8',
-      flex: 5,
-      marginHorizontal: 10
-    },
-    linkButton2: {
-      width: '60%',
-      height: 30,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#d1d1d1',
-      flex: 5,
-      marginHorizontal: 10
+  container: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'darkslateblue',
   },
-    linkText: {
-        color: 'white',
-        fontFamily: 'AveriaLibre-Regular',
-        fontSize: 20
-    },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: windowHeight * 0.05,
+  },
+  logo: {
+    fontSize: windowWidth > 600 ? 35 : 25,
+    fontFamily: 'AveriaLibre-Regular',
+    marginHorizontal: 10,
+    color: 'white',
+  },
+  inputContainer: {
+    width: windowWidth > 600 ? '60%' : '80%',
+    marginBottom: windowHeight * 0.02,
+  },
+  label: {
+    fontSize: windowWidth > 600 ? 18 : 16,
+    color: 'white',
+    fontFamily: 'AveriaLibre-Regular',
+    marginBottom: 5,
+  },
+  input: {
+    width: '100%',
+    backgroundColor: 'white',
+    fontFamily: 'AveriaLibre-Regular',
+    height: 40,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+  },
+  errorMessage: {
+    color: 'tomato',
+    fontFamily: 'AveriaLibre-Regular',
+    fontSize: windowWidth > 600 ? 15 : 12,
+  },
+  button: {
+    backgroundColor: '#5cdb95',
+    width: windowWidth > 600 ? '50%' : '80%',
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: windowHeight * 0.05,
+    marginTop: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontFamily: 'AveriaLibre-Regular',
+    fontSize: 25,
+  },
+  linksContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: windowWidth > 600 ? '50%' : '80%',
+    marginTop: windowHeight * 0.03,
+  },
+  linkButton: {
+    width: '100%',
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#4dc6e8',
+    marginBottom: 10,
+  },
+  linkText: {
+    color: 'white',
+    fontFamily: 'AveriaLibre-Regular',
+    fontSize: 20,
+  },
 });
 
 export default Login;

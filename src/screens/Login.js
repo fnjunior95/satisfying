@@ -48,8 +48,8 @@ const Login = (props) => {
           placeholder="usuario@dominio.com"
           value={email}
           onChangeText={(text) => setEmail(text)}
-         
-          
+
+
         />
       </View>
 
@@ -61,7 +61,7 @@ const Login = (props) => {
           secureTextEntry
           value={password}
           onChangeText={(text) => setPassword(text)}
-          
+
         />
       </View>
 
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#5cdb95',
-    width: windowWidth > 600 ? '50%' : '80%',
+    width: windowWidth > 600 ? '60%' : '80%',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
@@ -143,12 +143,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: windowWidth > 600 ? '50%' : '80%',
+    width: '100%',
     marginTop: windowHeight * 0.03,
   },
   linkButton: {
-    width: '100%',
-    height: 30,
+    width: windowWidth > 600 ? '60%' : '80%',
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#4dc6e8',

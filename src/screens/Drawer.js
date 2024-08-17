@@ -11,42 +11,53 @@ const Drawer = (props) => {
 
   return (
     <DrawerNavigator.Navigator
-      screenOptions={{ 
+      screenOptions={{
         drawerActiveTintColor: 'darkslateblue',
-        headerTitleStyle: { color: 'darkslateblue', fontFamily: 'AveriaLibre-Regular' },
+        headerTitleStyle: {
+          fontSize: 35,
+          color: 'white',
+          marginLeft: 10,
+          fontFamily: 'AveriaLibre-Regular'
+        },
         drawerLabelStyle: { fontSize: 50, color: 'white', fontFamily: 'AveriaLibre-Regular' },
-        drawerStyle: { backgroundColor: 'darkslateblue', width: '40%', fontFamily: 'AveriaLibre-Regular'}
+        drawerStyle: { backgroundColor: 'darkslateblue', width: '40%', fontFamily: 'AveriaLibre-Regular' },
+        headerBackground: () => (
+          <View style={{
+            alignItems: 'center',
+            marginBottom: 5,
+            backgroundColor: 'darkslateblue',
+            height: 60,
+            paddingHorizontal: 20
+          }} />
+        ),
       }}
 
-      drawerContent={ (props) => 
+      drawerContent={(props) =>
 
         <DrawerContentScrollView {...props}>
-        <View style={styles.emailContainer}>
-          <Text style={styles.emailText}>{email}</Text>
-        </View>
-        <View style={styles.separator}></View>
+          <View style={styles.emailContainer}>
+            <Text style={styles.emailText}>{email}</Text>
+          </View>
+          <View style={styles.separator}></View>
+          <DrawerItem icon={({ focused, color, size }) => (
+            <Icon
+              name="description"
+              size={size}
+              color={focused ? '#7cc' : '#ccc'}
+            />
+          )} labelStyle={{ color: 'white', fontSize: 25, fontFamily: 'AveriaLibre-Regular' }} label="Pesquisas" onPress={() => { props.navigation.goBack() }} />
 
-        <DrawerItem icon={({ focused, color, size }) => (
-          <Icon
-            name="description"
-            size={size}
-            color={focused ? '#7cc' : '#ccc'}
-          />
-        )} labelStyle={{color: 'white', fontSize: 25, fontFamily: 'AveriaLibre-Regular'}} label="Pesquisas" onPress={() => { props.navigation.goBack() }} />
+          <DrawerItem style={styles.sair} icon={({ focused, color, size }) => (
+            <Icon
+              name="login"
+              size={size}
+              color={focused ? '#7cc' : '#ccc'}
+            />
+          )} labelStyle={styles.labelSair} label="Sair" onPress={() => { props.navigation.popToTop() }} />
+        </DrawerContentScrollView>
 
-        <DrawerItem icon={({ focused, color, size }) => (
-          <Icon
-            name="login"
-            size={size}
-            color={focused ? '#7cc' : '#ccc'}
-          />
-        )} labelStyle={{color: 'white', fontSize: 25, fontFamily: 'AveriaLibre-Regular'}} label="Sair" onPress={() => { props.navigation.popToTop() }} />
-      </DrawerContentScrollView>
-
-      }> 
-
-      {/* COMPONENTE INUTIL QUE TA INVISIVEL */}
-      <DrawerNavigator.Screen name="Pesquisas" component={Home}/>
+      }>
+      <DrawerNavigator.Screen name="Pesquisas" component={Home} />
 
     </DrawerNavigator.Navigator>
   );
@@ -59,16 +70,23 @@ const styles = StyleSheet.create({
   emailText: {
     fontSize: 25,
     color: 'white',
-    alignSelf: 'center',
     marginBottom: 5,
+    marginLeft: 25,
     fontFamily: 'AveriaLibre-Regular',
   },
   separator: {
     borderBottomColor: 'white',
     borderBottomWidth: 1,
-    marginBottom: 20,
     marginHorizontal: 25,
   },
+  labelSair: {
+    color: 'white',
+    fontSize: 25,
+    fontFamily: 'AveriaLibre-Regular',
+  },
+  sair: {
+    marginTop: 135,
+  }
 });
 
 export default Drawer;

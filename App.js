@@ -13,7 +13,6 @@ import Agradecimento from './src/screens/Agradecimento';
 import Relatorio from './src/screens/Relatorio';
 
 const Stack = createStackNavigator();
-
 const App = () => {
   
   return (

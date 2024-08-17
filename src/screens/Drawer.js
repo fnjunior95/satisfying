@@ -2,13 +2,21 @@ import { createDrawerNavigator, DrawerItem, DrawerContentScrollView } from '@rea
 import { View, Text, StyleSheet } from 'react-native';
 import Home from '../screens/Home';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/config';
 
 const DrawerNavigator = createDrawerNavigator();
 
 const Drawer = (props) => {
-
+  
   const email = props.route.params.email;
-
+  const signOutUser = () => {
+    signOut(auth)
+      .then(() => {props.navigation.popToTop()})
+      .catch((error) => {
+        console.error('Erro ao fazer logout', error);
+  })
+  };
   return (
     <DrawerNavigator.Navigator
       screenOptions={{
@@ -53,7 +61,7 @@ const Drawer = (props) => {
               size={size}
               color={focused ? '#7cc' : '#ccc'}
             />
-          )} labelStyle={styles.labelSair} label="Sair" onPress={() => { props.navigation.popToTop() }} />
+          )} labelStyle={styles.labelSair} label="Sair" onPress={signOutUser} />
         </DrawerContentScrollView>
 
       }>

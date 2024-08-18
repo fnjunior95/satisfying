@@ -5,64 +5,88 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { format } from 'date-fns';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
-
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebase/config';  // Importando o Firestore configurado
 
 const NovaPesquisa = ({ navigation }) => {
-
   const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const [nomePesquisa, setNomePesquisa] = useState('');
   const [errorNome, setErrorNome] = useState('');
   const [errorData, setErrorData] = useState('');
   const [sucessoMessage, setSucessoMessage] = useState('');
 
-  const handleCadastroPesquisa = (nome, data) => {
-    setErrorNome(''); setErrorData(''); setSucessoMessage('');
-    if (nome != '' && data != '') {
-      setSucessoMessage('Nova pesquisa registrada!')
-    } else {
-      if (nome == '') {
-        setErrorNome('Preencha o nome da pesquisa');
-      }
-      if (data == '') {
-        setErrorData('Preencha a data');
-      }
+  const eventCollection = collection(db, "eventos");  // Criando referência para a coleção "eventos"
+
+  const addEvento = async () => {
+    if (nomePesquisa === '') {
+      setErrorNome('Preencha o nome da pesquisa');
+      return;
+    }
+    if (!date) {
+      setErrorData('Preencha a data');
+      return;
+    }
+
+    const docEvento = {
+      nome: nomePesquisa,
+      data: format(date, 'dd/MM/yyyy'),
+    };
+
+    try {
+      const docRef = await addDoc(eventCollection, docEvento);
+      setSucessoMessage('Nova pesquisa registrada! ID: ' + docRef.id);
+    } catch (error) {
+      setErrorNome('Erro ao cadastrar a pesquisa: ' + error.message);
     }
   };
 
   const handleImagePicker = () => {
     Alert.alert(
       "Selecione",
-      "Informe de onde voce quer pegar a foto",
+      "Informe de onde você quer pegar a foto",
       [
         {
           text: "Galeria",
-          onPress: () => pickImageFromGalery(),
+          onPress: pickImageFromGallery,
           style: "default"
         },
         {
-          text: "Camera",
-          onPress: () => pickImageFromCamera(),
+          text: "Câmera",
+          onPress: pickImageFromCamera,
           style: "default"
         }
       ],
       {
         cancelable: true
       }
-    )
-  }
+    );
+  };
 
-  const pickImageFromGalery = async () => {
-    const result = await launchImageLibrary(options = { mediaType: 'photo' });
-  }
+  const pickImageFromGallery = async () => {
+    const result = await launchImageLibrary({ mediaType: 'photo' });
+    if (result.didCancel) {
+      console.log('Usuário cancelou a seleção de imagem');
+    } else if (result.errorCode) {
+      console.log('Erro no ImagePicker: ', result.errorMessage);
+    } else {
+      console.log('Imagem selecionada: ', result.assets[0].uri);
+    }
+  };
 
   const pickImageFromCamera = async () => {
-    const result = await launchCamera(options = { mediaType: 'photo' });
-  }
+    const result = await launchCamera({ mediaType: 'photo' });
+    if (result.didCancel) {
+      console.log('Usuário cancelou a captura de imagem');
+    } else if (result.errorCode) {
+      console.log('Erro no ImagePicker: ', result.errorMessage);
+    } else {
+      console.log('Imagem capturada: ', result.assets[0].uri);
+    }
+  };
 
   return (
     <View style={styles.container}>
-
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.pop()}>
           <Icon name="arrow-back" size={30} color="lightblue" />
@@ -71,7 +95,6 @@ const NovaPesquisa = ({ navigation }) => {
       </View>
 
       <View style={styles.content}>
-
         <Text style={styles.label}>Nome</Text>
         <TextInput
           style={styles.input}
@@ -95,13 +118,11 @@ const NovaPesquisa = ({ navigation }) => {
           mode='date'
           open={open}
           date={date}
-          onConfirm={(date) => {
-            setOpen(false)
-            setDate(date)
+          onConfirm={(selectedDate) => {
+            setOpen(false);
+            setDate(selectedDate);
           }}
-          onCancel={() => {
-            setOpen(false)
-          }}
+          onCancel={() => setOpen(false)}
         />
 
         {errorData ? <Text style={styles.errorMessage}>{errorData}</Text> : null}
@@ -115,7 +136,7 @@ const NovaPesquisa = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => handleCadastroPesquisa(nomePesquisa, format(date, 'dd/MM/yyyy'))}
+          onPress={addEvento}
         >
           <Text style={styles.buttonText}>CADASTRAR</Text>
         </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, View, Text, TouchableOpacity, StyleSheet, Image  } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { format } from 'date-fns';
@@ -7,10 +7,9 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase/config';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config'; 
 import uuid from 'react-native-uuid';
-import { id } from 'date-fns/locale';
 
 const NovaPesquisa = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
@@ -21,32 +20,37 @@ const NovaPesquisa = ({ navigation }) => {
   const [sucessoMessage, setSucessoMessage] = useState('');
   const [imageUri, setImageUri] = useState(null);
 
-  const eventCollection = collection(db, "eventos");  // Criando referência para a coleção "eventos"
+  const eventCollection = collection(db, "eventos");
 
   const handleCadastroPesquisa = async () => {
-
     setErrorNome(''); setErrorData(''); setSucessoMessage('');
-    
-    if (nomePesquisa != '' && date != '') {
-      if (imageUri) {
-        const imageUrl = await uploadImage(imageUri);
-        console.log('URL da Imagem:', imageUrl);
-      }
-      setSucessoMessage('Nova pesquisa registrada!')
-    } else {
-      if (nomePesquisa == '') {
-        setErrorNome('Preencha o nome da pesquisa');
-      }
-      if (date == '') {
-        setErrorData('Preencha a data');
-      }
+
+    if (nomePesquisa === '') {
+      setErrorNome('Preencha o nome da pesquisa');
+      return;
     }
+
+    if (!date) {
+      setErrorData('Preencha a data');
+      return;
+    }
+
+    // Validando se o nome da pesquisa já existe
+    const q = query(eventCollection, where('nome', '==', nomePesquisa));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      setErrorNome('Uma pesquisa com esse nome já existe.');
+      return;
+    }
+
+    const imageUrl = imageUri ? await uploadImage(imageUri) : null;
 
     const docEvento = {
       id: uuid.v4(),
       nome: nomePesquisa,
       data: format(date, 'dd/MM/yyyy'),
-      imageUri: imageUri || null,
+      imageUri: imageUrl,
     };
 
     try {
@@ -64,7 +68,7 @@ const NovaPesquisa = ({ navigation }) => {
       [
         {
           text: "Galeria",
-          onPress: () => pickImageFromGallery(),
+          onPress: pickImageFromGallery,
           style: "default"
         },
         {
@@ -151,10 +155,6 @@ const NovaPesquisa = ({ navigation }) => {
         {errorData ? <Text style={styles.errorMessage}>{errorData}</Text> : null}
 
         <Text style={styles.label}>Imagem</Text>
-        {/* <TouchableOpacity style={styles.imageButton} onPress={handleImagePicker}>
-          <Text style={{ color: 'black' }}>Câmera/Galeria de imagens</Text>
-        </TouchableOpacity> */}
-
         <TouchableOpacity style={styles.imageButton} onPress={handleImagePicker}>
           {imageUri ? (
             <Image source={{ uri: imageUri }} style={styles.imagePreview} />
@@ -162,7 +162,7 @@ const NovaPesquisa = ({ navigation }) => {
             <Text style={{ color: 'black' }}>Câmera/Galeria de imagens</Text>
           )}
         </TouchableOpacity>
-        
+
         {sucessoMessage ? <Text style={styles.sucessoMessage}>{sucessoMessage}</Text> : null}
 
         <TouchableOpacity

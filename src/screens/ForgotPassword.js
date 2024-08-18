@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    fontSize: 35,
+    fontSize: 25,
     color: 'white',
     marginLeft: 10,
     fontFamily: 'AveriaLibre-Regular'
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     alignSelf: 'flex-start',
-    marginHorizontal: 160,
+    marginHorizontal: 80,
     fontFamily: 'AveriaLibre-Regular'
   },
   input: {
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     fontFamily: 'AveriaLibre-Regular'
   },
   button: {
-    backgroundColor: '#37BD6D',
+    backgroundColor: '#5cdb95',
     width: '60%',
     height: 40,
     justifyContent: 'center',

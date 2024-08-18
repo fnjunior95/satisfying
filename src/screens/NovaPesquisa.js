@@ -20,7 +20,7 @@ const NovaPesquisa = ({ navigation }) => {
   const [sucessoMessage, setSucessoMessage] = useState('');
   const [imageUri, setImageUri] = useState(null);
 
-  const eventCollection = collection(db, "eventos");
+  const eventCollection = collection(db, "pesquisas");
 
   const handleCadastroPesquisa = async () => {
     setErrorNome(''); setErrorData(''); setSucessoMessage('');

@@ -1,27 +1,41 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
+import { collection, getDocs } from "firebase/firestore";
+import { db } from '../firebase/config';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Home = (props) => {
+    const [researchData, setResearchData] = useState([]);
 
-    // Simulação de dados de pesquisa
-    const researchData = [
-        { title: 'SECOMP 2023', date: '10/10/2023', image: require('../../assets/images/secomp-icon.png') },
-        { title: 'UBUNTU 2022', date: '05/06/2022', image: require('../../assets/images/ubuntu-icon.png') },
-        { title: 'MENINAS CPU', date: '01/04/2022', image: require('../../assets/images/meninas-icon.png') }
-    ];
+    const fetchPesquisas = useCallback(async () => {
+        try {
+            const querySnapshot = await getDocs(collection(db, "pesquisas"));
+            const data = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setResearchData(data);
+        } catch (error) {
+            console.error("Erro ao recuperar documentos: ", error);
+        }
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchPesquisas();
+        }, [fetchPesquisas])
+    );
 
     const showNovaPesquisa = () => {
-        props.navigation.navigate('NovaPesquisa')
-    }
+        props.navigation.navigate('NovaPesquisa');
+    };
 
     const showAcoesPesquisa = (titulo, data) => {
-        props.navigation.navigate('AcoesPesquisa', { screen: titulo, date: data })
-    }
+        props.navigation.navigate('AcoesPesquisa', { screen: titulo, date: data });
+    };
 
     return (
-        
         <View style={styles.container}>
-        
             <View style={styles.searchContainer}>
                 <View style={styles.inputContainer}>
                     <Image source={require('../../assets/icons/search-icon.png')} style={styles.searchIcon} />
@@ -35,18 +49,24 @@ const Home = (props) => {
             </View>
 
             <ScrollView
-                horizontal={true} 
-                showsHorizontalScrollIndicator={false} 
-                style={styles.scrollContainer} 
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                style={styles.scrollContainer}
             >
                 {researchData.map((research, index) => (
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         key={index}
                         style={styles.researchCard}
-                        onPress={() => {showAcoesPesquisa(research.title)}} >
-                        <Image source={research.image} style={styles.cardImage} resizeMode="contain" />
-                        <Text style={[styles.title, { color: '#3F92C5' }]}>{research.title}</Text>
-                        <Text style={styles.date}>{research.date}</Text>
+                        onPress={() => { showAcoesPesquisa(research.title, research.date) }} >
+                        {research.imageUri && (
+                            <Image
+                                source={{ uri: research.imageUri }}
+                                style={styles.cardImage}
+                                resizeMode="contain"
+                            />
+                        )}
+                        <Text style={[styles.title, { color: '#3F92C5' }]}>{research.nome}</Text>
+                        <Text style={styles.date}>{research.data}</Text>
                     </TouchableOpacity>
                 ))}
             </ScrollView>

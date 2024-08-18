@@ -9,6 +9,8 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase/config';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase/config'; 
+import uuid from 'react-native-uuid';
+import { id } from 'date-fns/locale';
 
 const NovaPesquisa = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
@@ -25,7 +27,7 @@ const NovaPesquisa = ({ navigation }) => {
 
     setErrorNome(''); setErrorData(''); setSucessoMessage('');
     
-    if (nomePesquisa != '' && data != '') {
+    if (nomePesquisa != '' && date != '') {
       if (imageUri) {
         const imageUrl = await uploadImage(imageUri);
         console.log('URL da Imagem:', imageUrl);
@@ -35,12 +37,13 @@ const NovaPesquisa = ({ navigation }) => {
       if (nomePesquisa == '') {
         setErrorNome('Preencha o nome da pesquisa');
       }
-      if (data == '') {
+      if (date == '') {
         setErrorData('Preencha a data');
       }
     }
 
     const docEvento = {
+      id: uuid.v4(),
       nome: nomePesquisa,
       data: format(date, 'dd/MM/yyyy'),
       imageUri: imageUri || null,

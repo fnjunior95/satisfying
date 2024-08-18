@@ -7,19 +7,24 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase/config';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebase/config'; 
 
 const NovaPesquisa = ({ navigation }) => {
-
   const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const [nomePesquisa, setNomePesquisa] = useState('');
   const [errorNome, setErrorNome] = useState('');
   const [errorData, setErrorData] = useState('');
   const [sucessoMessage, setSucessoMessage] = useState('');
   const [imageUri, setImageUri] = useState(null);
-  
-  const handleCadastroPesquisa = async (nome, data) => {
+
+  const eventCollection = collection(db, "eventos");  // Criando referência para a coleção "eventos"
+
+  const handleCadastroPesquisa = async () => {
+
     setErrorNome(''); setErrorData(''); setSucessoMessage('');
+    
     if (nome != '' && data != '') {
       if (imageUri) {
         const imageUrl = await uploadImage(imageUri);
@@ -34,12 +39,25 @@ const NovaPesquisa = ({ navigation }) => {
         setErrorData('Preencha a data');
       }
     }
+
+    const docEvento = {
+      nome: nomePesquisa,
+      data: format(date, 'dd/MM/yyyy'),
+      imageUri: imageUri || null,
+    };
+
+    try {
+      const docRef = await addDoc(eventCollection, docEvento);
+      setSucessoMessage('Nova pesquisa registrada! ID: ' + docRef.id);
+    } catch (error) {
+      setErrorNome('Erro ao cadastrar a pesquisa: ' + error.message);
+    }
   };
 
   const handleImagePicker = () => {
     Alert.alert(
       "Selecione",
-      "Informe de onde voce quer pegar a foto",
+      "Informe de onde você quer pegar a foto",
       [
         {
           text: "Galeria",
@@ -47,16 +65,16 @@ const NovaPesquisa = ({ navigation }) => {
           style: "default"
         },
         {
-          text: "Camera",
-          onPress: () => pickImageFromCamera(),
+          text: "Câmera",
+          onPress: pickImageFromCamera,
           style: "default"
         }
       ],
       {
         cancelable: true
       }
-    )
-  }
+    );
+  };
 
   const uploadImage = async (uri) => {
     try {
@@ -86,9 +104,9 @@ const NovaPesquisa = ({ navigation }) => {
       setImageUri(result.assets[0].uri);
     }
   };
+
   return (
     <View style={styles.container}>
-
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.pop()}>
           <Icon name="arrow-back" size={30} color="lightblue" />
@@ -97,7 +115,6 @@ const NovaPesquisa = ({ navigation }) => {
       </View>
 
       <View style={styles.content}>
-
         <Text style={styles.label}>Nome</Text>
         <TextInput
           style={styles.input}
@@ -121,13 +138,11 @@ const NovaPesquisa = ({ navigation }) => {
           mode='date'
           open={open}
           date={date}
-          onConfirm={(date) => {
-            setOpen(false)
-            setDate(date)
+          onConfirm={(selectedDate) => {
+            setOpen(false);
+            setDate(selectedDate);
           }}
-          onCancel={() => {
-            setOpen(false)
-          }}
+          onCancel={() => setOpen(false)}
         />
 
         {errorData ? <Text style={styles.errorMessage}>{errorData}</Text> : null}
@@ -149,7 +164,7 @@ const NovaPesquisa = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => handleCadastroPesquisa(nomePesquisa, format(date, 'dd/MM/yyyy'))}
+          onPress={handleCadastroPesquisa}
         >
           <Text style={styles.buttonText}>CADASTRAR</Text>
         </TouchableOpacity>

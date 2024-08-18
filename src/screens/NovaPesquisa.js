@@ -25,14 +25,14 @@ const NovaPesquisa = ({ navigation }) => {
 
     setErrorNome(''); setErrorData(''); setSucessoMessage('');
     
-    if (nome != '' && data != '') {
+    if (nomePesquisa != '' && data != '') {
       if (imageUri) {
         const imageUrl = await uploadImage(imageUri);
         console.log('URL da Imagem:', imageUrl);
       }
       setSucessoMessage('Nova pesquisa registrada!')
     } else {
-      if (nome == '') {
+      if (nomePesquisa == '') {
         setErrorNome('Preencha o nome da pesquisa');
       }
       if (data == '') {

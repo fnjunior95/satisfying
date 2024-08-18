@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Alert, View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { format } from 'date-fns';
-import {launchCamera, launchImageLibrary, ImageLibraryOptions} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
+
 
 const NovaPesquisa = ({ navigation }) => {
 
@@ -16,18 +17,18 @@ const NovaPesquisa = ({ navigation }) => {
   const [sucessoMessage, setSucessoMessage] = useState('');
 
   const handleCadastroPesquisa = (nome, data) => {
-    setErrorNome(''); setErrorData('');setSucessoMessage('');
-    if(nome != '' && data != '') {
-        setSucessoMessage('Nova pesquisa registrada!')
+    setErrorNome(''); setErrorData(''); setSucessoMessage('');
+    if (nome != '' && data != '') {
+      setSucessoMessage('Nova pesquisa registrada!')
     } else {
-    if(nome == '') {
+      if (nome == '') {
         setErrorNome('Preencha o nome da pesquisa');
-    }
-    if(data == '') {
+      }
+      if (data == '') {
         setErrorData('Preencha a data');
+      }
     }
-    }
-};
+  };
 
   const handleImagePicker = () => {
     Alert.alert(
@@ -52,11 +53,11 @@ const NovaPesquisa = ({ navigation }) => {
   }
 
   const pickImageFromGalery = async () => {
-    const result = await launchImageLibrary(options={mediaType: 'photo'});
+    const result = await launchImageLibrary(options = { mediaType: 'photo' });
   }
 
   const pickImageFromCamera = async () => {
-    const result = await launchCamera(options={mediaType: 'photo'});
+    const result = await launchCamera(options = { mediaType: 'photo' });
   }
 
   return (
@@ -68,9 +69,9 @@ const NovaPesquisa = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.title}>Nova pesquisa</Text>
       </View>
-      
+
       <View style={styles.content}>
-       
+
         <Text style={styles.label}>Nome</Text>
         <TextInput
           style={styles.input}
@@ -84,32 +85,31 @@ const NovaPesquisa = ({ navigation }) => {
         <TextInput
           style={styles.input}
           value={format(date, 'dd/MM/yyyy')}
-          right={<TextInput.Icon icon="calendar-month" size={35} style={{paddingTop: 10}} onPress={() => setOpen(true)}/>}
+          right={<TextInput.Icon icon="calendar-month" size={35} style={{ paddingTop: 10 }} onPress={() => setOpen(true)} />}
           editable={false}
         />
         <DatePicker
-        title={'Selecione a data'}
-        modal
-        locale='pt'
-        mode='date'
-        open={open}
-        date={date}
-        onConfirm={(date) => {
-          setOpen(false)
-          setDate(date)
-        }}
-        onCancel={() => {
-          setOpen(false)
-        }}
+          title={'Selecione a data'}
+          modal
+          locale='pt'
+          mode='date'
+          open={open}
+          date={date}
+          onConfirm={(date) => {
+            setOpen(false)
+            setDate(date)
+          }}
+          onCancel={() => {
+            setOpen(false)
+          }}
         />
-        
+
         {errorData ? <Text style={styles.errorMessage}>{errorData}</Text> : null}
 
         <Text style={styles.label}>Imagem</Text>
         <TouchableOpacity style={styles.imageButton} onPress={handleImagePicker}>
           <Text style={{ color: 'black' }}>Câmera/Galeria de imagens</Text>
         </TouchableOpacity>
-        
         
         {sucessoMessage ? <Text style={styles.sucessoMessage}>{sucessoMessage}</Text> : null}
 

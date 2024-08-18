@@ -11,11 +11,14 @@ import ModifySearch from './src/screens/ModifySearch';
 import Coleta from './src/screens/Coleta';
 import Agradecimento from './src/screens/Agradecimento';
 import Relatorio from './src/screens/Relatorio';
+import { Provider } from 'react-redux';
+import store from './src/redux/store';
 
 const Stack = createStackNavigator();
 const App = () => {
   
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false, headerBackVisible: false }}>
         <Stack.Screen name='Login' component={Login}  />
@@ -31,6 +34,7 @@ const App = () => {
         <Stack.Screen name='Relatorio' component={Relatorio} />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 };
 

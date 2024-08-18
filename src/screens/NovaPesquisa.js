@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Alert, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, StyleSheet, Image  } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { format } from 'date-fns';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
-
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../firebase/config';
 
 const NovaPesquisa = ({ navigation }) => {
 
@@ -15,10 +16,15 @@ const NovaPesquisa = ({ navigation }) => {
   const [errorNome, setErrorNome] = useState('');
   const [errorData, setErrorData] = useState('');
   const [sucessoMessage, setSucessoMessage] = useState('');
-
-  const handleCadastroPesquisa = (nome, data) => {
+  const [imageUri, setImageUri] = useState(null);
+  
+  const handleCadastroPesquisa = async (nome, data) => {
     setErrorNome(''); setErrorData(''); setSucessoMessage('');
     if (nome != '' && data != '') {
+      if (imageUri) {
+        const imageUrl = await uploadImage(imageUri);
+        console.log('URL da Imagem:', imageUrl);
+      }
       setSucessoMessage('Nova pesquisa registrada!')
     } else {
       if (nome == '') {
@@ -37,7 +43,7 @@ const NovaPesquisa = ({ navigation }) => {
       [
         {
           text: "Galeria",
-          onPress: () => pickImageFromGalery(),
+          onPress: () => pickImageFromGallery(),
           style: "default"
         },
         {
@@ -52,14 +58,34 @@ const NovaPesquisa = ({ navigation }) => {
     )
   }
 
-  const pickImageFromGalery = async () => {
-    const result = await launchImageLibrary(options = { mediaType: 'photo' });
-  }
+  const uploadImage = async (uri) => {
+    try {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const filename = `${nomePesquisa}_${Date.now()}.jpg`;
+      const storageRef = ref(storage, `images/${filename}`);
+      await uploadBytes(storageRef, blob);
+      const downloadUrl = await getDownloadURL(storageRef);
+      return downloadUrl;
+    } catch (error) {
+      console.error('Erro ao fazer upload da imagem:', error);
+      return null;
+    }
+  };
+
+  const pickImageFromGallery = async () => {
+    const result = await launchImageLibrary({ mediaType: 'photo' });
+    if (result.assets && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
 
   const pickImageFromCamera = async () => {
-    const result = await launchCamera(options = { mediaType: 'photo' });
-  }
-
+    const result = await launchCamera({ mediaType: 'photo' });
+    if (result.assets && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
   return (
     <View style={styles.container}>
 
@@ -107,8 +133,16 @@ const NovaPesquisa = ({ navigation }) => {
         {errorData ? <Text style={styles.errorMessage}>{errorData}</Text> : null}
 
         <Text style={styles.label}>Imagem</Text>
-        <TouchableOpacity style={styles.imageButton} onPress={handleImagePicker}>
+        {/* <TouchableOpacity style={styles.imageButton} onPress={handleImagePicker}>
           <Text style={{ color: 'black' }}>Câmera/Galeria de imagens</Text>
+        </TouchableOpacity> */}
+
+        <TouchableOpacity style={styles.imageButton} onPress={handleImagePicker}>
+          {imageUri ? (
+            <Image source={{ uri: imageUri }} style={styles.imagePreview} />
+          ) : (
+            <Text style={{ color: 'black' }}>Câmera/Galeria de imagens</Text>
+          )}
         </TouchableOpacity>
         
         {sucessoMessage ? <Text style={styles.sucessoMessage}>{sucessoMessage}</Text> : null}
@@ -184,6 +218,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     marginHorizontal: 160,
+  },
+  imagePreview: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 5,
   },
   button: {
     backgroundColor: '#37BD6D',

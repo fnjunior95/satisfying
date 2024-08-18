@@ -11,6 +11,7 @@ const ForgotPassword = (props) => {
 
 
   const handleRecoverPassword = () => {
+    setSucessoMessage(''); setErrorMessage('');
     sendPasswordResetEmail(auth, email)
     .then(() => {
       setSucessoMessage('Email de recuperação de senha enviado com sucesso!!');

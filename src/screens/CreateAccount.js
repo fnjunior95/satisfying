@@ -12,6 +12,7 @@ const CreateAccount = (props) => {
   const [sucessoMessage, setSucessoMessage] = useState('');
 
   const handleCadastro = () => {    
+    setSucessoMessage('');setErrorMessage('');
     createUserWithEmailAndPassword(auth,email, password)
     .then((userCredential) => {
       setSucessoMessage('Cadastro realizado com sucesso:'+ userCredential.user.email);

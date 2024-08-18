@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { auth } from '../firebase/config';
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -14,10 +16,6 @@ const Login = (props) => {
     return /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/.test(email);
   };
 
-  const handleError = () => {
-    setErrorMessage('E-mail e/ou senha inválidos.');
-  };
-
   const showCreateAccount = () => {
     props.navigation.navigate('CreateAccount');
   };
@@ -26,18 +24,39 @@ const Login = (props) => {
     props.navigation.navigate('ForgotPassword');
   };
 
-  const showHome = (email, password) => {
-    if (validarEmail(email) && password !== '') {
-      props.navigation.navigate('Drawer', { email: email });
-    } else {
-      handleError();
+  const showHome = () => {
+    if (!validarEmail(email)) {
+      setErrorMessage('Por favor, insira um e-mail válido.');
+      return;
     }
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userLogged) => {
+        props.navigation.navigate('Drawer', { email: userLogged.user.email });
+      })
+      .catch((error) => {
+        let errorMsg = '';
+        switch (error.code) {
+          case 'auth/invalid-email':
+            errorMsg = 'E-mail inválido.';
+            break;
+          case 'auth/user-not-found':
+            errorMsg = 'Usuário não encontrado.';
+            break;
+          case 'auth/wrong-password':
+            errorMsg = 'Senha incorreta.';
+            break;
+          default:
+            errorMsg = 'Erro ao fazer login. Por favor, tente novamente.';
+        }
+        setErrorMessage(errorMsg);
+      });
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.logoContainer}>
-        <Text style={styles.logo}> Satisfying.you </Text>
+        <Text style={styles.logo}>Satisfying.you</Text>
         <Icon name="mood" size={windowWidth > 600 ? 50 : 40} color="white" />
       </View>
 
@@ -48,8 +67,8 @@ const Login = (props) => {
           placeholder="usuario@dominio.com"
           value={email}
           onChangeText={(text) => setEmail(text)}
-
-
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
       </View>
 
@@ -61,13 +80,12 @@ const Login = (props) => {
           secureTextEntry
           value={password}
           onChangeText={(text) => setPassword(text)}
-
         />
       </View>
 
       {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
 
-      <TouchableOpacity style={styles.button} onPress={() => showHome(email, password)}>
+      <TouchableOpacity style={styles.button} onPress={showHome}>
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
 

@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../firebase/config';
 
 const ForgotPassword = (props) => {
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [sucessoMessage, setSucessoMessage] = useState('');
 
-  //valida email
-  const validarEmail = (email) => {
-    return /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/.test(email)
-  };
 
-  const handleRecoverPassword = (text) => {
-    setSucessoMessage('');setErrorMessage('');
-    if(validarEmail(text)) {
-      setSucessoMessage('Email enviado com sucesso!')
-    } else {
-      setErrorMessage('E-mail parece ser inválido');
-    }
+  const handleRecoverPassword = () => {
+    sendPasswordResetEmail(auth, email)
+    .then(() => {
+      setSucessoMessage('Email de recuperação de senha enviado com sucesso!!');
+    })
+    .catch((error) => {
+      setErrorMessage('Erro ao enviar email de recuperação de senha: ' + JSON.stringify(error));
+    });
   };
 
   return (
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
     color: 'tomato',
     fontSize: 15,
     fontFamily: 'AveriaLibre-Regular',
-    textAlign:'left'
+    textAlign: 'left'
   },
   sucessoMessage: {
     color: 'limegreen',

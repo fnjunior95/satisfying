@@ -1,78 +1,168 @@
 import React, { useState } from 'react';
-import { Alert, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { format } from 'date-fns';
-import {launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
 import Modal from 'react-native-modal';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { setPesquisaAtual } from '../redux/slices/pesquisaSlice';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import { db, storage } from '../firebase/config';
+
 const ModifySearch = (props) => {
 
-    const [date, setDate] = useState(new Date());
-    const [nomePesquisa, setNomePesquisa] = useState('');
-    
+    const dispatch = useDispatch();
+    const pesquisaAtual = useSelector(state => state.pesquisa.pesquisaAtual);
+    const formatDate = (dateString) => {
+        const [day, month, year] = dateString.split('/');
+        return `${year}-${month}-${day}`;
+    };
+
+    const [date, setDate] = useState(new Date(formatDate(pesquisaAtual.data)));
+    const [open, setOpen] = useState(false);
+    const [nomePesquisa, setNomePesquisa] = useState(pesquisaAtual.nome);
     const [errorNome, setErrorNome] = useState('');
     const [errorData, setErrorData] = useState('');
     const [sucessoMessage, setSucessoMessage] = useState('');
     const [isModalVisible, setModalVisible] = useState(false);
+    const [imageUri, setImageUri] = useState(pesquisaAtual.imageUri);
+    const [imageChanged, setImageChanged] = useState(false); 
 
-    const handleModificarPesquisa = (nome, data) => {
-        setErrorNome(''); setErrorData('');setSucessoMessage('');
-        if(nome != '' && data != '') {
-            setSucessoMessage('Nova pesquisa registrada!')
-        } else {
-        if(nome == '') {
+    const uploadImage = async (uri) => {
+        try {
+            const response = await fetch(uri);
+            const blob = await response.blob();
+            const filename = `${nomePesquisa}_${Date.now()}.jpg`;
+            const storageRef = ref(storage, `images/${filename}`);
+            await uploadBytes(storageRef, blob);
+            const downloadUrl = await getDownloadURL(storageRef);
+            return downloadUrl;
+        } catch (error) {
+            console.error('Erro ao fazer upload da imagem:', error);
+            return null;
+        }
+    };
+
+    const deleteOldImage = async (oldImageUri) => {
+        if (oldImageUri) {
+            const oldImageRef = ref(storage, oldImageUri);
+            try {
+                await deleteObject(oldImageRef);
+            } catch (error) {
+                console.error('Erro ao excluir a imagem antiga:', error);
+            }
+        }
+    };
+
+    const handleModificarPesquisa = async () => {
+
+        setErrorNome('');
+        setErrorData('');
+        setSucessoMessage('');
+
+        if (nomePesquisa === '') {
             setErrorNome('Preencha o nome da pesquisa');
+            return;
         }
-        if(data == '') {
+        if (!date) {
             setErrorData('Preencha a data');
+            return;
         }
+
+        let newImageUri = imageUri;
+
+        if (imageChanged) {
+            await deleteOldImage(pesquisaAtual.imageUri); // Exclui a imagem antiga
+            newImageUri = await uploadImage(imageUri); // Faz upload da nova imagem
+        }
+
+        const pesquisaAtualizada = {
+            id: pesquisaAtual.id,
+            nome: nomePesquisa,
+            data: format(date, 'dd/MM/yyyy'),
+            imageUri: newImageUri,
+        };
+
+        try {
+            // Atualizar no Firestore
+            const pesquisaRef = doc(db, 'pesquisas', pesquisaAtual.id);
+            await updateDoc(pesquisaRef, pesquisaAtualizada);
+
+            // Atualizar no Redux
+            dispatch(setPesquisaAtual(pesquisaAtualizada));
+
+            setSucessoMessage('Pesquisa atualizada com sucesso!');
+        } catch (error) {
+            setErrorNome('Erro ao atualizar a pesquisa: ' + error.message);
         }
     };
 
     const handleImagePicker = () => {
         Alert.alert(
-        "Selecione",
-        "Informe de onde voce quer pegar a foto",
-        [
+            "Selecione",
+            "Informe de onde voce quer pegar a foto",
+            [
+                {
+                    text: "Galeria",
+                    onPress: () => pickImageFromGalery(),
+                    style: "default"
+                },
+                {
+                    text: "Camera",
+                    onPress: () => pickImageFromCamera(),
+                    style: "default"
+                }
+            ],
             {
-            text: "Galeria",
-            onPress: () => pickImageFromGalery(),
-            style: "default"
-            },
-            {
-            text: "Camera",
-            onPress: () => pickImageFromCamera(),
-            style: "default"
+                cancelable: true
             }
-        ],
-        {
-            cancelable: true
-        }
         )
     }
 
     const pickImageFromGalery = async () => {
-        const result = await launchImageLibrary(options={mediaType: 'photo'});
+        const result = await launchImageLibrary(options = { mediaType: 'photo' });
+        if (result.assets && result.assets.length > 0) {
+            setImageUri(result.assets[0].uri);
+            setImageChanged(true); // Indica que a imagem foi alterada
+        }
     }
 
     const pickImageFromCamera = async () => {
-        const result = await launchCamera(options={mediaType: 'photo'});
+        const result = await launchCamera(options = { mediaType: 'photo' });
+        if (result.assets && result.assets.length > 0) {
+            setImageUri(result.assets[0].uri);
+            setImageChanged(true); // Indica que a imagem foi alterada
+        }
     }
+
+    const handleDeletePesquisa = async () => {
+        try {
+            await deleteOldImage(pesquisaAtual.imageUri);
+            const pesquisaRef = doc(db, 'pesquisas', pesquisaAtual.id);
+            await deleteDoc(pesquisaRef);
+            props.navigation.navigate('Home');
+            setModalVisible(false);
+        } catch (error) {
+            console.error('Erro ao excluir a pesquisa: ', error);
+        }
+    };
 
     return (
         <View style={styles.container}>
 
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => props.navigation.pop()}>
-                <Icon name="arrow-back" size={30} color="lightblue" />
+                    <Icon name="arrow-back" size={30} color="lightblue" />
                 </TouchableOpacity>
                 <Text style={styles.title}>Modificar pesquisa</Text>
             </View>
-            
+
             <View style={styles.content}>
-            
+
                 <Text style={styles.label}>Nome</Text>
                 <TextInput
                     style={styles.input}
@@ -86,7 +176,7 @@ const ModifySearch = (props) => {
                 <TextInput
                     style={styles.input}
                     value={format(date, 'dd/MM/yyyy')}
-                    right={<TextInput.Icon icon="calendar-month" size={35} style={{paddingTop: 10}} onPress={() => setOpen(true)}/>}
+                    right={<TextInput.Icon icon="calendar-month" size={35} style={{ paddingTop: 10 }} onPress={() => setOpen(true)} />}
                     editable={false}
                 />
                 <DatePicker
@@ -94,42 +184,49 @@ const ModifySearch = (props) => {
                     modal
                     locale='pt'
                     mode='date'
+                    open={open}
                     date={date}
-                    onConfirm={(date) => {
-                    setOpen(false)
-                    setDate(date)
+                    onConfirm={(selectedDate) => {
+                        setOpen(false);
+                        setDate(selectedDate);
                     }}
-                    onCancel={() => {
-                    setOpen(false)
-                    }}
+                    onCancel={() => setOpen(false)}
                 />
                 {errorData ? <Text style={styles.errorMessage}>{errorData}</Text> : null}
 
                 <Text style={styles.label}>Imagem</Text>
                 <TouchableOpacity style={styles.imageButton} onPress={handleImagePicker}>
-                <Text style={{ color: 'black' }}>Câmera/Galeria de imagens</Text>
+                    {pesquisaAtual.imageUri ? (
+                        <Image
+                            source={{ uri: pesquisaAtual.imageUri }}
+                            style={styles.imagePreview}
+                            resizeMode="contain"
+                        />
+                    ) : (
+                        <Text style={{ color: 'black' }}>Câmera/Galeria de imagens</Text>
+                    )}
                 </TouchableOpacity>
-                
+
                 {sucessoMessage ? <Text style={styles.sucessoMessage}>{sucessoMessage}</Text> : null}
 
             </View>
-        
-            <View style={{flexDirection: 'row', flex: 1}}>
-                <View style={{flexDirection: 'column', flex: 8 }}> 
+
+            <View style={{ flexDirection: 'row', flex: 1 }}>
+                <View style={{ flexDirection: 'column', flex: 8 }}>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => handleModificarPesquisa(nomePesquisa, format(date, 'dd/MM/yyyy'))}
-                        >
+                        onPress={handleModificarPesquisa}
+                    >
                         <Text style={styles.buttonText}>SALVAR</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{flexDirection: 'column', flex: 2 }}>
+                <View style={{ flexDirection: 'column', flex: 2 }}>
                     <TouchableOpacity
                         style={styles.btnDelete}
                         onPress={() => setModalVisible(true)}
-                        >
-                            <Icon name="delete" size={30} color="white" />
-                            <Text style={{ color: 'white', fontFamily: 'AveriaLibre-Regular' }}>Apagar</Text>
+                    >
+                        <Icon name="delete" size={30} color="white" />
+                        <Text style={{ color: 'white', fontFamily: 'AveriaLibre-Regular' }}>Apagar</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -138,22 +235,22 @@ const ModifySearch = (props) => {
                 <View style={styles.modalContent}>
                     <Text style={styles.modalText}>Tem certeza de apagar essa pesquisa?</Text>
                     <View style={styles.buttonContainer}>
-                    <TouchableOpacity 
-                        style={[styles.modalButton, { backgroundColor: 'tomato' }]}
-                        onPress={() => setModalVisible(false)}>
-                        <Text style={styles.modalButtonText}>SIM</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[styles.modalButton, { backgroundColor: 'darkslateblue' }]}
-                        onPress={() => setModalVisible(false)}>
-                        <Text style={styles.modalButtonText}>CANCELAR</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.modalButton, { backgroundColor: 'tomato' }]}
+                            onPress={handleDeletePesquisa}>
+                            <Text style={styles.modalButtonText}>SIM</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.modalButton, { backgroundColor: 'darkslateblue' }]}
+                            onPress={() => setModalVisible(false)}>
+                            <Text style={styles.modalButtonText}>CANCELAR</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
         </View>
 
-        
+
     );
 };
 
@@ -271,6 +368,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'white',
         fontFamily: 'AveriaLibre-Regular'
+    },
+    imagePreview: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 5,
     },
 });
 

@@ -29,7 +29,7 @@ const Login = (props) => {
       setErrorMessage('Por favor, insira um e-mail válido.');
       return;
     }
-
+    setErrorMessage('');
     signInWithEmailAndPassword(auth, email, password)
       .then((userLogged) => {
         props.navigation.navigate('Drawer', { email: userLogged.user.email });

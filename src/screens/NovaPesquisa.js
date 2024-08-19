@@ -8,8 +8,7 @@ import DatePicker from 'react-native-date-picker';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase/config';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../firebase/config'; 
-import uuid from 'react-native-uuid';
+import { db } from '../firebase/config';
 
 const NovaPesquisa = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
@@ -47,15 +46,27 @@ const NovaPesquisa = ({ navigation }) => {
     const imageUrl = imageUri ? await uploadImage(imageUri) : null;
 
     const docEvento = {
-      id: uuid.v4(),
       nome: nomePesquisa,
       data: format(date, 'dd/MM/yyyy'),
       imageUri: imageUrl,
     };
 
     try {
+      
       const docRef = await addDoc(eventCollection, docEvento);
-      setSucessoMessage('Nova pesquisa registrada! ID: ' + docRef.id);
+
+      var docEventoResultados = {
+        pessimo: 0,
+        ruim: 0,
+        neutro: 0,
+        bom: 0,
+        excelente: 0,
+        pesquisa: docRef.id
+      };
+
+      const eventCollectionResult = collection(db, "resultados");
+      await addDoc(eventCollectionResult, docEventoResultados);
+      setSucessoMessage('Nova pesquisa registrada!');
     } catch (error) {
       setErrorNome('Erro ao cadastrar a pesquisa: ' + error.message);
     }

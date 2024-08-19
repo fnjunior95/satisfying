@@ -3,8 +3,13 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image 
 import { collection, getDocs } from "firebase/firestore";
 import { db } from '../firebase/config';
 import { useFocusEffect } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import {setPesquisaAtual} from '../redux/slices/pesquisaSlice';
 
 const Home = (props) => {
+
+    const dispatch = useDispatch();
+
     const [researchData, setResearchData] = useState([]);
 
     const fetchPesquisas = useCallback(async () => {
@@ -30,8 +35,9 @@ const Home = (props) => {
         props.navigation.navigate('NovaPesquisa');
     };
 
-    const showAcoesPesquisa = (titulo, data) => {
-        props.navigation.navigate('AcoesPesquisa', { screen: titulo, date: data });
+    const showAcoesPesquisa = (pesquisa) => {
+        dispatch(setPesquisaAtual(pesquisa));
+        props.navigation.navigate('AcoesPesquisa');
     };
 
     return (
@@ -57,7 +63,7 @@ const Home = (props) => {
                     <TouchableOpacity
                         key={index}
                         style={styles.researchCard}
-                        onPress={() => { showAcoesPesquisa(research.title, research.date) }} >
+                        onPress={() => { showAcoesPesquisa(research) }} >
                         {research.imageUri && (
                             <Image
                                 source={{ uri: research.imageUri }}

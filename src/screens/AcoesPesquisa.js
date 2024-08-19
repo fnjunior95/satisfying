@@ -1,35 +1,36 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useSelector } from 'react-redux';
 
 const AcoesPesquisa = (props) => {
 
-  const titulo = props.route.params.screen;
-
+  const pesquisaAtual = useSelector(state => state.pesquisa.pesquisaAtual);
+  
   return (
     <View style={{ flex: 1, backgroundColor: '#6A5ACD' }}>
       <View style={styles.header}>
-          <TouchableOpacity onPress={() => props.navigation.pop()}>
+        <TouchableOpacity onPress={() => props.navigation.pop()}>
           <Icon name="arrow-back" size={30} color="lightblue" />
         </TouchableOpacity>
-        <Text style={styles.title}>{titulo}</Text>
+        <Text style={styles.title}>{pesquisaAtual.nome}</Text>
       </View>
-        
-        <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('ModifySearch')}>
-            <Icon name="edit-document" size={30} color="white" />
-            <Text style={styles.buttonText}>Modificar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Coleta', { screen: titulo })}>
-            <Icon name="library-add-check" size={30} color="white" />
-            <Text style={styles.buttonText}>Coletar dados</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Relatorio')}>
-            <Icon name="donut-large" size={30} color="white" />
-            <Text style={styles.buttonText}>Relatório</Text>
-            </TouchableOpacity>
-        </View>
-        
+
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('ModifySearch')}>
+          <Icon name="edit-document" size={30} color="white" />
+          <Text style={styles.buttonText}>Modificar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Coleta')}>
+          <Icon name="library-add-check" size={30} color="white" />
+          <Text style={styles.buttonText}>Coletar dados</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Relatorio')}>
+          <Icon name="donut-large" size={30} color="white" />
+          <Text style={styles.buttonText}>Relatório</Text>
+        </TouchableOpacity>
+      </View>
+
     </View>
   );
 };
